@@ -1,0 +1,48 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+build/
+dist/
+.eggs/
+
+# Editors / IDE
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Secrets
+.env
+.env.local
+.env.*.local
+
+# Local Claude state (per-project, not source)
+.claude/
+
+# Training artifacts (large, generated locally)
+wandb/
+
+# FastAPI runtime pano captures (verification only, not source)
+saved_panos/
+
+# SQLite catalogs are generated artifacts (real one lives at /data/geolocation/)
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+nohup.out
+
+# Tampermonkey backups
+*.user.js.backup
+
+# Unrelated nested app (separate project, own git repo)
+map-generator-app/

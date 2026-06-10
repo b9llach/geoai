@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geoai"
+version = "0.1.0"
+description = "Street View geolocation: two-stage hybrid (SigLIP2 + Gemma 4 26B A4B)"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    # Phase 1 — scraper
+    "streetlevel>=0.12.5",
+    "aiohttp>=3.9",
+    "shapely>=2.0",
+    "pillow>=10",
+    "httpx>=0.27",
+    "typer>=0.12",
+    "pydantic>=2.7",
+    "tqdm>=4.66",
+    # Phase 2 — processing (catalog + crop rendering)
+    "geopandas>=1.0",
+    "pyogrio>=0.9",     # fast GADM (gpkg) reader, replaces fiona
+    "s2sphere>=0.2.5",
+    "py360convert>=0.1",
+    "rasterio>=1.3",    # Köppen-Geiger and GHS_POP raster lookups
+    "numpy>=1.26",
+    "pyarrow>=15",      # parquet engine for pandas 3.x (no longer bundled)
+    # Phase 4 — Stage 1 training. NOTE: torch + torchvision must be installed
+    # separately from PyTorch's CUDA wheel index, e.g.:
+    #   pip install --index-url https://download.pytorch.org/whl/cu128 torch torchvision
+    # PyPI's default torch wheel is CPU-only.
+    "transformers>=4.50",
+    "accelerate>=0.30",
+    "datasets>=2.20",
+    "wandb>=0.17",
+]
+
+[project.scripts]
+geoai-scrape = "geoai.scraper.cli:app"
+geoai-catalog = "geoai.processing.catalog:app"
+geoai-render-crops = "geoai.processing.crop_runner:app"
+geoai-split = "geoai.processing.split:app"
+geoai-cell-stats = "geoai.processing.cell_stats:app"
+geoai-train-stage1 = "geoai.stage1.train:app"
+geoai-predict-stage1 = "geoai.stage1.predict:app"
+geoai-ingest-country-guides = "geoai.plonkit.ingest:app"
+geoai-serve = "geoai.serve.api:cli"
+
+[tool.setuptools.packages.find]
+include = ["geoai*"]
